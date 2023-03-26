@@ -13,3 +13,7 @@ export interface ITimetableRow extends IWithId {
   end: string;
   name: string;
 }
+
+export interface ITimetableGroup extends IWithId {
+  name: string;
+}
