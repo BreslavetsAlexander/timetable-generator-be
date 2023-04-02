@@ -17,3 +17,9 @@ export interface ITimetableRow extends IWithId {
 export interface ITimetableGroup extends IWithId {
   name: string;
 }
+
+export interface ISheet extends IWithId {
+  name: string;
+  description: string;
+  authorId: IUser['id'];
+}
