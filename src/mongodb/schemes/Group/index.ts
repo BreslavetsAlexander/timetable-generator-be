@@ -6,7 +6,8 @@ import { renameIdField } from '../../utils';
 
 const TimetableGroupSchema = new Schema<OmitId<ITimetableGroup>>(
   {
-    name: { type: Schema.Types.String, required: true },
+    name: { type: String, required: true },
+    sheetId: { type: String, required: true },
   },
   DEFAULT_SCHEMA_OPTIONS,
 );

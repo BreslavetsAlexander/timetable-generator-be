@@ -12,10 +12,13 @@ export interface ITimetableRow extends IWithId {
   start: string;
   end: string;
   name: string;
+  groupId: ITimetableGroup['id'];
+  sheetId: ISheet['id'];
 }
 
 export interface ITimetableGroup extends IWithId {
   name: string;
+  sheetId: ISheet['id'];
 }
 
 export interface ISheet extends IWithId {

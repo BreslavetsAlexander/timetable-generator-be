@@ -9,6 +9,8 @@ const TimetableRowSchema = new Schema<OmitId<ITimetableRow>>(
     name: { type: String, required: true },
     start: { type: String, required: true },
     end: { type: String, required: true },
+    groupId: { type: String, required: true },
+    sheetId: { type: String, required: true },
   },
   DEFAULT_SCHEMA_OPTIONS,
 );
