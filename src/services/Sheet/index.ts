@@ -67,8 +67,29 @@ class _SheetService {
 
   async getById(id: ISheet['id']) {
     const sheet = await Sheet.findById(id);
+    const groupsBySheetId = await TimetableGroupService.getAllBySheetId(id);
 
-    return sheet;
+    const groups = await Promise.all(
+      groupsBySheetId.map(async (group) => {
+        const { id, name, sheetId } = group;
+        const rows = await TimetableRowService.getAllBySheetIdAndGroupId(sheetId, id);
+
+        return {
+          id,
+          name,
+          sheetId,
+          rows,
+        };
+      }),
+    );
+
+    return {
+      id: sheet?.id,
+      name: sheet?.name,
+      description: sheet?.description,
+      authorId: sheet?.authorId,
+      groups,
+    };
   }
 
   async updateById(id: ISheet['id'], data: CreateSheet) {
