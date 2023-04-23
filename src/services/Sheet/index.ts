@@ -100,6 +100,8 @@ class _SheetService {
 
   async deleteById(id: ISheet['id']) {
     await Sheet.deleteOne({ _id: id });
+    await TimetableGroupService.deleteAllBySheetId(id);
+    await TimetableRowService.deleteAllBySheetId(id);
   }
 }
 

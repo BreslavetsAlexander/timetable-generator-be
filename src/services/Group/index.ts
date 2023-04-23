@@ -36,6 +36,10 @@ class _TimetableGroupService {
   async deleteById(id: ITimetableGroup['id']) {
     await TimetableGroup.deleteOne({ _id: id });
   }
+
+  async deleteAllBySheetId(sheetId: ISheet['id']) {
+    await TimetableGroup.deleteMany({ sheetId });
+  }
 }
 
 export const TimetableGroupService = new _TimetableGroupService();
