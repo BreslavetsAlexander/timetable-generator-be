@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sheet <%=id%></title>
+  </head>
+  <body>
+    <h1><%= name %></h1>
+    <p><%= description %></p>
+    <div>
+      <% groups.forEach((group) => { %>
+      <div>
+        <p><%= group.name %></p>
+        <table>
+          <thead>
+            <tr>
+              <th>Start</th>
+              <th>End</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% group.rows.forEach((row) => { %>
+            <tr>
+              <td><%= row.start %></td>
+              <td><%= row.end %></td>
+              <td><%= row.name %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <% }) %>
+      </div>
+    </div>
+  </body>
+</html>

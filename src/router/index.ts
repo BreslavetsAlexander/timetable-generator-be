@@ -28,5 +28,8 @@ router.get('/sheets', SheetController.getAll);
 router.get('/sheets/:id', SheetController.getById);
 router.put('/sheets/:id', SheetController.updateById);
 router.delete('/sheets/:id', SheetController.deleteById);
+router.post('/sheets/:id/generate/html', SheetController.generateHtmlFile);
+router.get('/sheets/:id/html', SheetController.getHtmlFile);
+router.delete('/sheets/:id/html', SheetController.deleteHtmlFile);
 
 export { router };

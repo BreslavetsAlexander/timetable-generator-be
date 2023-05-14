@@ -1,8 +1,13 @@
+import { writeFileSync, readFileSync, rmSync } from 'fs';
+import { resolve } from 'path';
+import { compile } from 'ejs';
 import { Sheet } from '../../mongodb';
 import { CreateSheet } from '../../definitions/Sheet';
 import { ISheet } from '../../definitions';
 import { TimetableGroupService } from '../Group';
 import { TimetableRowService } from '../Row';
+import { getHtmlFilePath } from './utils';
+import { TEMPLATES_FOLDER } from '../../constants';
 
 class _SheetService {
   async create(payload: CreateSheet) {
@@ -102,6 +107,27 @@ class _SheetService {
     await Sheet.deleteOne({ _id: id });
     await TimetableGroupService.deleteAllBySheetId(id);
     await TimetableRowService.deleteAllBySheetId(id);
+    this.deleteHtmlFile(id);
+  }
+
+  async generateHtmlFile(id: ISheet['id']) {
+    const sheet = await this.getById(id);
+    const templateFilePath = resolve('./', TEMPLATES_FOLDER, 'sheetTemplate.html');
+    const templateFileContent = readFileSync(templateFilePath, 'utf-8');
+
+    const content = compile(templateFileContent)(sheet).replace(/\s{2,}/g, '');
+
+    writeFileSync(getHtmlFilePath(id), content, {
+      encoding: 'utf-8',
+    });
+  }
+
+  getHtmlFile(id: ISheet['id']) {
+    return getHtmlFilePath(id);
+  }
+
+  deleteHtmlFile(id: ISheet['id']) {
+    rmSync(getHtmlFilePath(id));
   }
 }
 

@@ -35,6 +35,28 @@ class _SheetController {
       message: 'The object was successfully deleted',
     });
   }
+
+  async generateHtmlFile(req: Request<Pick<ISheet, 'id'>, {}, {}, {}>, res: Response) {
+    await SheetService.generateHtmlFile(req.params.id);
+
+    return res.json({
+      message: 'The html file was successfully generated',
+    });
+  }
+
+  getHtmlFile(req: Request<Pick<ISheet, 'id'>, {}, {}, {}>, res: Response) {
+    const filePath = SheetService.getHtmlFile(req.params.id);
+
+    return res.sendFile(filePath);
+  }
+
+  deleteHtmlFile(req: Request<Pick<ISheet, 'id'>, {}, {}, {}>, res: Response) {
+    SheetService.deleteHtmlFile(req.params.id);
+
+    return res.json({
+      message: 'The html file was successfully deleted',
+    });
+  }
 }
 
 export const SheetController = new _SheetController();
