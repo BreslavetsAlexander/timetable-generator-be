@@ -1,12 +1,13 @@
 import { writeFileSync, readFileSync, rmSync } from 'fs';
 import { resolve } from 'path';
 import { compile } from 'ejs';
+import { generatePdf } from 'html-pdf-node';
 import { Sheet } from '../../mongodb';
 import { CreateSheet } from '../../definitions/Sheet';
 import { ISheet } from '../../definitions';
 import { TimetableGroupService } from '../Group';
 import { TimetableRowService } from '../Row';
-import { getHtmlFilePath } from './utils';
+import { getHtmlFilePath, getPdfFilePath } from './utils';
 import { TEMPLATES_FOLDER } from '../../constants';
 
 class _SheetService {
@@ -128,6 +129,27 @@ class _SheetService {
 
   deleteHtmlFile(id: ISheet['id']) {
     rmSync(getHtmlFilePath(id));
+  }
+
+  async generatePdfFile(id: ISheet['id']) {
+    await this.generateHtmlFile(id);
+    const content = readFileSync(getHtmlFilePath(id), 'utf-8');
+
+    generatePdf(
+      { content },
+      {
+        format: 'A4',
+        path: getPdfFilePath(id),
+      },
+    );
+  }
+
+  getPdfFile(id: ISheet['id']) {
+    return getPdfFilePath(id);
+  }
+
+  deletePdfFile(id: ISheet['id']) {
+    rmSync(getPdfFilePath(id));
   }
 }
 

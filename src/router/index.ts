@@ -31,5 +31,8 @@ router.delete('/sheets/:id', SheetController.deleteById);
 router.post('/sheets/:id/generate/html', SheetController.generateHtmlFile);
 router.get('/sheets/:id/html', SheetController.getHtmlFile);
 router.delete('/sheets/:id/html', SheetController.deleteHtmlFile);
+router.post('/sheets/:id/generate/pdf', SheetController.generatePdfFile);
+router.get('/sheets/:id/pdf', SheetController.getPdfFile);
+router.delete('/sheets/:id/pdf', SheetController.deletePdfFile);
 
 export { router };

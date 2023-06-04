@@ -5,11 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sheet <%=id%></title>
+    <style>
+      .red {
+        color: red;
+      }
+    </style>
   </head>
   <body>
-    <h1><%= name %></h1>
-    <p><%= description %></p>
-    <div>
+    <h1 style="color: blueviolet"><%= name %></h1>
+    <p class="red"><%= description %></p>
+    <div style="border: 1px solid cyan">
       <% groups.forEach((group) => { %>
       <div>
         <p><%= group.name %></p>
