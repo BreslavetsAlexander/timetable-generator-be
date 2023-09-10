@@ -15,11 +15,8 @@ class _TimetableRowService {
     return rows;
   }
 
-  async getAllBySheetIdAndGroupId(sheetId: ISheet['id'], groupId: ITimetableGroup['id']) {
-    const rows = await TimetableRow.find({
-      sheetId,
-      groupId,
-    });
+  async getAllByGroupId(groupId: ITimetableGroup['id']) {
+    const rows = await TimetableRow.find({ groupId });
 
     return rows;
   }

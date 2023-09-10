@@ -7,7 +7,7 @@ import { CreateSheet } from '../../definitions/Sheet';
 import { ISheet } from '../../definitions';
 import { TimetableGroupService } from '../Group';
 import { TimetableRowService } from '../Row';
-import { getHtmlFilePath, getPdfFilePath } from './utils';
+import { getHtmlFilePath, getPdfFilePath, isExistsHtmlFile, isExistsPdfFile } from './utils';
 import { TEMPLATES_FOLDER } from '../../constants';
 
 class _SheetService {
@@ -73,24 +73,10 @@ class _SheetService {
 
   async getById(id: ISheet['id']) {
     const sheet = await Sheet.findById(id);
-    const groupsBySheetId = await TimetableGroupService.getAllBySheetId(id);
-
-    const groups = await Promise.all(
-      groupsBySheetId.map(async (group) => {
-        const { id, name, sheetId } = group;
-        const rows = await TimetableRowService.getAllBySheetIdAndGroupId(sheetId, id);
-
-        return {
-          id,
-          name,
-          sheetId,
-          rows,
-        };
-      }),
-    );
+    const groups = await TimetableGroupService.getAllBySheetId(id);
 
     return {
-      id: sheet?.id,
+      id,
       name: sheet?.name,
       description: sheet?.description,
       authorId: sheet?.authorId,
@@ -108,7 +94,14 @@ class _SheetService {
     await Sheet.deleteOne({ _id: id });
     await TimetableGroupService.deleteAllBySheetId(id);
     await TimetableRowService.deleteAllBySheetId(id);
-    this.deleteHtmlFile(id);
+
+    if (isExistsHtmlFile(id)) {
+      this.deleteHtmlFile(id);
+    }
+
+    if (isExistsPdfFile(id)) {
+      this.deletePdfFile(id);
+    }
   }
 
   async generateHtmlFile(id: ISheet['id']) {

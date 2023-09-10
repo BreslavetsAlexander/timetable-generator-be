@@ -1,6 +1,7 @@
 import { TimetableGroup } from '../../mongodb';
 import { CreateTimetableGroup } from '../../definitions/Group';
 import { ITimetableGroup, ISheet } from '../../definitions';
+import { TimetableRowService } from '../Row';
 
 class _TimetableGroupService {
   async create(payload: CreateTimetableGroup) {
@@ -17,14 +18,29 @@ class _TimetableGroupService {
 
   async getAllBySheetId(sheetId: ISheet['id']) {
     const groups = await TimetableGroup.find({ sheetId });
+    const withRows = await Promise.all(
+      groups.map(async ({ id }) => await this.getByIdWithRows(id)),
+    );
 
-    return groups;
+    return withRows;
   }
 
   async getById(id: ITimetableGroup['id']) {
     const group = await TimetableGroup.findById(id);
 
     return group;
+  }
+
+  async getByIdWithRows(id: ITimetableGroup['id']) {
+    const group = await TimetableGroup.findById(id);
+    const rows = await TimetableRowService.getAllByGroupId(id);
+
+    return {
+      id,
+      name: group?.name,
+      sheetId: group?.sheetId,
+      rows,
+    };
   }
 
   async updateById(id: ITimetableGroup['id'], data: CreateTimetableGroup) {
