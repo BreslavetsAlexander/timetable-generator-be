@@ -9,3 +9,7 @@ interface IGroup extends Omit<CreateTimetableGroup, 'sheetId'> {
 export type CreateSheet = Omit<ISheet, 'id'> & {
   groups: IGroup[];
 };
+
+export type UpdateSheet = ISheet & {
+  groups: IGroup[];
+};

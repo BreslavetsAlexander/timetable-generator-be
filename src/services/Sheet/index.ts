@@ -3,7 +3,7 @@ import { resolve } from 'path';
 import { compile } from 'ejs';
 import { generatePdf } from 'html-pdf-node';
 import { Sheet } from '../../mongodb';
-import { CreateSheet } from '../../definitions/Sheet';
+import { CreateSheet, UpdateSheet } from '../../definitions/Sheet';
 import { ISheet } from '../../definitions';
 import { TimetableGroupService } from '../Group';
 import { TimetableRowService } from '../Row';
@@ -84,10 +84,61 @@ class _SheetService {
     };
   }
 
-  async updateById(id: ISheet['id'], data: CreateSheet) {
-    await Sheet.updateOne({ _id: id }, data);
+  async updateById(id: ISheet['id'], data: UpdateSheet) {
+    const { name, description, groups, authorId } = data;
+    await Sheet.updateOne(
+      { _id: id },
+      {
+        name,
+        description,
+      },
+    );
+    await TimetableGroupService.deleteAllBySheetId(id);
+    await TimetableRowService.deleteAllBySheetId(id);
 
-    return this.getById(id);
+    const groupsList = groups.map(async (group) => {
+      const createdGroup = await TimetableGroupService.create({
+        name: group.name,
+        sheetId: id,
+      });
+
+      const rowsList = await Promise.all(
+        group.rows.map((row) => {
+          return TimetableRowService.create({
+            ...row,
+            sheetId: id,
+            groupId: createdGroup.id,
+          });
+        }),
+      );
+
+      const rows = rowsList.map((row) => {
+        return {
+          start: row.start,
+          end: row.end,
+          name: row.name,
+          groupId: createdGroup.id,
+          sheetId: id,
+        };
+      });
+
+      return {
+        id: createdGroup.id,
+        name,
+        sheetId: id,
+        rows,
+      };
+    });
+
+    const createdGroups = await Promise.all(groupsList);
+
+    return {
+      id,
+      name,
+      description,
+      authorId,
+      groups: createdGroups,
+    };
   }
 
   async deleteById(id: ISheet['id']) {

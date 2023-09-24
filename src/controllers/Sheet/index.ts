@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
 import { SheetService } from '../../services';
-import { CreateSheet } from '../../definitions/Sheet';
+import { CreateSheet, UpdateSheet } from '../../definitions/Sheet';
 import { ISheet } from '../../definitions';
 
 class _SheetController {
@@ -22,7 +22,7 @@ class _SheetController {
     return res.json(sheet);
   }
 
-  async updateById(req: Request<Pick<ISheet, 'id'>, {}, CreateSheet, {}, {}>, res: Response) {
+  async updateById(req: Request<Pick<ISheet, 'id'>, {}, UpdateSheet, {}, {}>, res: Response) {
     const sheet = await SheetService.updateById(req.params.id, req.body);
 
     return res.json(sheet);
