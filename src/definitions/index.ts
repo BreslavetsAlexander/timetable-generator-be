@@ -6,6 +6,7 @@ export interface IUser extends IWithId {
   firstName: string;
   lastName: string;
   username: string;
+  password: string;
 }
 
 export interface ITimetableRow extends IWithId {

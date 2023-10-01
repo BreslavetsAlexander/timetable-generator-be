@@ -21,6 +21,12 @@ class _UserService {
     return user;
   }
 
+  async getByUsername(username: IUser['username']) {
+    const user = await User.findOne({ username });
+
+    return user;
+  }
+
   async updateById(id: IUser['id'], data: CreateUser) {
     await User.updateOne({ _id: id }, data);
 
@@ -29,6 +35,12 @@ class _UserService {
 
   async deleteById(id: IUser['id']) {
     await User.deleteOne({ _id: id });
+  }
+
+  async isDuplicate(username: IUser['username']) {
+    const candidate = await User.findOne({ username });
+
+    return !!candidate;
   }
 }
 
