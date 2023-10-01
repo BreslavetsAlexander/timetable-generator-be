@@ -1,18 +1,14 @@
 import { Router } from 'express';
 import { usersRouter } from './users';
 import { rowsRouter } from './rows';
-import { TimetableGroupController, SheetController } from '../controllers';
+import { groupsRouter } from './groups';
+import { SheetController } from '../controllers';
 
 const router = Router();
 
 router.use('/users', usersRouter);
 router.use('/rows', rowsRouter);
-
-router.post('/groups', TimetableGroupController.create);
-router.get('/groups', TimetableGroupController.getAll);
-router.get('/groups/:id', TimetableGroupController.getById);
-router.put('/groups/:id', TimetableGroupController.updateById);
-router.delete('/groups/:id', TimetableGroupController.deleteById);
+router.use('/groups', groupsRouter);
 
 router.post('/sheets', SheetController.create);
 router.get('/sheets', SheetController.getAll);
