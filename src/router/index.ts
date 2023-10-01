@@ -1,15 +1,10 @@
 import { Router } from 'express';
-import {
-  UserController,
-  TimetableRowController,
-  TimetableGroupController,
-  SheetController,
-} from '../controllers';
+import { usersRouter } from './users';
+import { TimetableRowController, TimetableGroupController, SheetController } from '../controllers';
 
 const router = Router();
 
-router.post('/users', UserController.create);
-router.get('/users', UserController.getAll);
+router.use('/users', usersRouter);
 
 router.post('/rows', TimetableRowController.create);
 router.get('/rows', TimetableRowController.getAll);

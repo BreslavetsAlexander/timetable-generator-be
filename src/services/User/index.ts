@@ -1,14 +1,9 @@
 import { User } from '../../mongodb';
 import { CreateUser } from '../../definitions/User';
+import { IUser } from '../../definitions';
 
 class _UserService {
   async create(payload: CreateUser) {
-    const candidate = await User.findOne({ username: payload.username });
-
-    if (candidate) {
-      throw new Error('User with same username already exists');
-    }
-
     const user = await User.create(payload);
 
     return user;
@@ -18,6 +13,22 @@ class _UserService {
     const users = await User.find();
 
     return users;
+  }
+
+  async getById(id: IUser['id']) {
+    const user = await User.findById(id);
+
+    return user;
+  }
+
+  async updateById(id: IUser['id'], data: CreateUser) {
+    await User.updateOne({ _id: id }, data);
+
+    return this.getById(id);
+  }
+
+  async deleteById(id: IUser['id']) {
+    await User.deleteOne({ _id: id });
   }
 }
 
