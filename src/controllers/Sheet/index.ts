@@ -2,10 +2,16 @@ import { Response, Request } from 'express';
 import { SheetService } from '../../services';
 import { CreateSheet, UpdateSheet } from '../../definitions/Sheet';
 import { ISheet } from '../../definitions';
+import { IWithUserId } from '../../definitions/controllers';
 
 class _SheetController {
-  async create(req: Request<{}, {}, CreateSheet, {}, {}>, res: Response) {
-    const sheet = await SheetService.create(req.body);
+  async create(req: Request<{}, {}, CreateSheet & IWithUserId, {}, {}>, res: Response) {
+    const { userId, ...sheetData } = req.body;
+
+    const sheet = await SheetService.create({
+      ...sheetData,
+      authorId: userId,
+    });
 
     return res.json(sheet);
   }
