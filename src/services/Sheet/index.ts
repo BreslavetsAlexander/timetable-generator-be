@@ -4,7 +4,7 @@ import { compile } from 'ejs';
 import { generatePdf } from 'html-pdf-node';
 import { Sheet } from '../../mongodb';
 import { CreateSheet, UpdateSheet } from '../../definitions/Sheet';
-import { ISheet } from '../../definitions';
+import { ISheet, IUser } from '../../definitions';
 import { TimetableGroupService } from '../Group';
 import { TimetableRowService } from '../Row';
 import { getHtmlFilePath, getPdfFilePath, isExistsHtmlFile, isExistsPdfFile } from './utils';
@@ -67,6 +67,12 @@ class _SheetService {
 
   async getAll() {
     const sheets = await Sheet.find();
+
+    return sheets;
+  }
+
+  async getByAuthorId(authorId: IUser['id']) {
+    const sheets = await Sheet.find({ authorId });
 
     return sheets;
   }
