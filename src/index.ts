@@ -9,6 +9,7 @@ import { ENV_VARIABLES, STATIC_FOLDER } from './constants';
 const app: Express = express();
 const { DB_URL, PORT } = ENV_VARIABLES;
 
+app.disable('etag');
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, STATIC_FOLDER)));
 app.use(cors());
